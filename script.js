@@ -19,7 +19,7 @@ const COLORS = [
   "purple"
 ];
 
-
+//randomizing the color array
 function shuffle(array) {
   let counter = array.length;
   // FISHER-YATES SORTING ALGORITHM
@@ -35,59 +35,64 @@ function shuffle(array) {
   return array;
 }
 
-
-let shuffledColors = shuffle(COLORS);
-console.log(shuffledColors);
-
+//enabling the start button
 counter.addEventListener("click", createDivsForColors);
 
+
+// Creating divs for cards and adding classes
 function createDivsForColors() {
-  const colorArray = COLORS;
-  console.log(colorArray);
-  for (let color of colorArray) {
-    const newDiv = document.createElement("div");
-    
+  let shuffledColors = shuffle(COLORS);
+  for (let color of shuffledColors) {
+    const newDiv = document.createElement("div");   
     newDiv.classList.add(color);
 
+    //adds event listener to click card and change color
     newDiv.addEventListener("click", currentCard);
 
     gameContainer.append(newDiv);   
   }
+  //disabling the start button
   counter.removeEventListener('click', createDivsForColors);
+
+  //enabling the add cards button
   addMore.addEventListener('click', addMoreCards);
 }
 
+
+
+// adds 4 more cards with new colors added to color array
 function addMoreCards(e){
   let newCards = 0;
   while(newCards <2){
-    const newDiv1 = document.createElement("div");
-    const newDiv2 = document.createElement("div");
-    const randomColor = 'a' + Math.floor(Math.random()*16777215).toString(16);
-    
-    newDiv1.classList.add(randomColor);
-    newDiv2.classList.add(randomColor);
+    const randomColor = 'a' + Math.random().toString(16).slice(2, 8);
 
-    newDiv1.addEventListener("click", currentCard);
-    newDiv2.addEventListener("click", currentCard);
-
-    gameContainer.append(newDiv1, newDiv2);
+    COLORS.push(randomColor);
+    COLORS.push(randomColor);
     newCards++;
   }
+  gameContainer.innerHTML = "";
+  createDivsForColors();
 }
 
 
 
-
+//resets the entire game
 resetButton.addEventListener('click', function timedRefresh(time) {
 	setTimeout("location.reload(true);", 0);
 })
 
+
+
+//
 function currentCard(e) {
+  //once clicked it removes the event listener so it cant be clicked again
   e.target.removeEventListener("click", currentCard);
   let removeAll = document.querySelectorAll('div > div');
   let remove = document.querySelectorAll(`div[class = ${e.target.classList[0]}]`);
+  //the math to increment the counter
   counter.innerText = Math.floor((count+1)/2);
   
+  //change color of card depending on the class attribute
   if(e.target.classList.value === 'red' || 
     e.target.classList.value === 'blue' || 
     e.target.classList.value ==='green' || 
@@ -99,14 +104,22 @@ function currentCard(e) {
     let colorArr = color.split('');
     colorArr.shift();
     colorString = colorArr.join('');
-    console.log(colorString);
     e.target.style.backgroundColor = `#${colorString}`;
   };
+
+  for(let i = 0; i <removeAll.length; i++){
+    if(!removeAll[i].backgroundColor){
+      break;
+    }else{
+      localStorage.setItem('Low Score', counter.innerText);
+    }
+  }
+
+  //for matching the two cards during each attempt
   matchArr.push(e.target);
   
-  
 
-  
+  //if they match, remove event listener and keep color
   if(count%2 === 0 && e.target.classList[0] === matchArr[matchArr.length-2].classList[0]){
     counter.innerText = `HOORAY!`;
     setTimeout(function(){
@@ -115,27 +128,38 @@ function currentCard(e) {
     remove[0].removeEventListener("click", currentCard);
     remove[1].removeEventListener("click", currentCard);
     
+    //if they dont match try again
   } else if (count%2 === 0 && e.currentTarget.classList[0] !== matchArr[matchArr.length-2].classList[0]){
     counter.innerText = `Try Again`;
     setTimeout(function(){
       counter.innerText = Math.floor((count+1)/2);
+      // set localStorage with low score if all divs have background colors
     },1000);
-      removeAll.forEach(item => {
-        item.removeEventListener('click', currentCard);
-      });
+    removeAll.forEach(item => {
+      item.removeEventListener('click', currentCard);
+    });
     
-    
+    //if they dont match change back to white and increment counter
     setTimeout(function (){
-      e.target.style.backgroundColor = '#fff';
-      matchArr[matchArr.length-2].style.backgroundColor = '#fff';
+      e.target.style.backgroundColor = '';
+      matchArr[matchArr.length-2].style.backgroundColor = '';
       removeAll.forEach(item => {
         item.addEventListener('click', currentCard);
       })
-        }, 1000);
-      }
-      count++
-    };
-    
-    
+      
+    }, 1000);
+  }
+  count++
+  
+  
+  
+};
 
+// for(let i = 0; i <removeAll.length; i++){
+//   if(!removeAll[i].backgroundColor){
+//     break;
+//   }else{
+//     localStorage.setItem('Low Score', counter.innerText);
+//   }
+// }
 
