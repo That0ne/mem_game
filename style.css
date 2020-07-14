@@ -44,7 +44,7 @@ h3 {
   position: relative;
   margin-left: auto;
   margin-right: auto;
-  top: 420px;
+  top: 20px;
   left: 0;
   right: 0;
   font-size: 2rem;
@@ -61,7 +61,7 @@ h3 {
 #addMore{
   display: block;
   position: relative;
-  margin: -100px auto 50px auto;
+  margin: 60px auto 50px auto;
   top: 0;
   left: 0;
   right: 0;
@@ -70,6 +70,7 @@ h3 {
   color: #fff;
   background-color: #000;
   width: 12rem;
+  height: 135px;
   border-radius: 15px;
   padding: 10px;
   transition: 0.5s;
@@ -81,7 +82,7 @@ h3 {
   position: relative;
   margin-left: auto;
   margin-right: auto;
-  top: 440px;
+  top: 40px;
   left: 0;
   right: 0;
   font-size: 2rem;
@@ -106,9 +107,9 @@ h3 {
   justify-content: center;
 }
 
-#game div:nth-child(6){
+/* #game div:nth-child(6){
   grid-column: 4;
-}
+} */
 
 
 #game div {
